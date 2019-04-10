@@ -1,0 +1,88 @@
+
+drop table if exists k_user;
+create table k_user
+(
+	userId varchar(32) primary key,
+	userName varchar(100),
+	userPswd varchar(100)
+);
+
+drop table if exists k_role;
+create table k_role
+(
+	roleId varchar(32) primary key,
+	roleName varchar(100)
+);
+
+drop table if exists k_user_role;
+create table k_user_role
+(
+	urid varchar(32) primary key,
+	userId varchar(32),
+	roleId varchar(32)
+);
+
+drop table if exists k_priority_resource;
+create table k_priority_resource
+(
+	priorityId varchar(32) primary key,
+	priorityCode varchar(100),
+	priorityName varchar(100),
+	authf char(1),
+	showf char(1),
+	resourceCode varchar(100),
+	resourceName varchar(100),
+	resourceUrl varchar(200),
+	resourcePCode varchar(100)
+);
+
+--字段说明
+--authf: 是否需要认证0-不需要;1-需要，对于配置成0的FlAccessControlFilter会认为无需认证，配置成1或者其他值或者不配置，FlAccessControlFilter会交给下游的其他拦截器
+--1、如果父资源配置authf=1,子资源配置也应该配置成authf=1
+--2、如果父资源配置authf=0,子资源配置配置authf=1/0都可以
+--3、如果一个资源authf=0,但是配置为需要授权,则授权必定会失败
+--4、如果一个资源authf=1,配置为无需授权则无需授权，配置为需要授权则需要授权
+--
+--showf: ajax异步请求的url标记为0，否则1
+--
+
+
+drop table if exists k_role_priority;
+create table k_role_priority
+(
+	rpid varchar(32) primary key,
+	roleId varchar(32),
+	priorityId varchar(32)
+);
+
+
+insert into k_user values('u1', 'ioc', 'di');
+insert into k_role values('r1', 'role1');
+insert into k_role values('r1', 'role2');
+
+insert into k_user_role values('ur1', 'u1', 'r1');
+insert into k_user_role values('ur2', 'u1', 'r2');
+
+insert into k_priority_resource values('pr1', 'pr1', 'pr1权限', '1', '1', 'pr1Resource', 'pr1资源名称', '/pr1', null);
+insert into k_priority_resource values('pr1-c1', 'pr1-c1', 'pr1-c1权限', '1', '1', 'pr1-c1Resource', 'pr1-c1资源名称', '/pr1-c1', 'pr1');
+insert into k_priority_resource values('pr1-c2', 'pr1-c2', 'pr1-c2权限', '1', '1', 'pr1-c2Resource', 'pr1-c2资源名称', '/pr1-c2', 'pr1');
+insert into k_priority_resource values('pr2', 'pr2', 'pr2权限', '0', '1', 'pr2Resource', 'pr2资源名称', '/pr2', null);
+insert into k_priority_resource values('pr3', 'pr3', 'pr3权限', '0', '0', null, null, '/pr3', null);
+
+insert into k_role_priority values('1', 'r1', 'pr1');
+insert into k_role_priority values('2', 'r1', 'pr1-c1');
+insert into k_role_priority values('3', 'r1', 'pr1-c2');
+insert into k_role_priority values('4', 'r1', 'pr2');
+insert into k_role_priority values('5', 'r1', 'pr3');
+
+insert into k_role_priority values('6', 'r2', 'pr1');
+insert into k_role_priority values('7', 'r2', 'pr1-c1');
+
+
+
+
+
+
+
+
+

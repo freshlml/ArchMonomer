@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.freshjuice.fl.dao.resource.IResourceDao">
+	
+	<select id="getFAuthOfPath" parameterType="java.lang.String" resultType="java.lang.String">
+		select authf from k_priority_resource where resourceUrl = #{value, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getPermissionsOfUserByUn" parameterType="java.lang.String" resultType="java.lang.String">
+		select distinct pr.priorityCode
+		from k_user_role ur join k_user u on u.userId = ur.userId
+		                    join k_role r on r.roleId = ur.roleId
+		                    join k_role_priority rp on rp.roleId = r.roleId
+							join k_priority_resource pr on pr.priorityId = rp.priorityId
+		where u.userName = #{value, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getResourceOfPath" parameterType="java.lang.String" resultType="com.freshjuice.fl.dto.resource.PriorityResource">
+		select authf,showf from k_priority_resource where resourceUrl = #{value, jdbcType=VARCHAR}
+	</select>
+</mapper>
