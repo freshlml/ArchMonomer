@@ -36,15 +36,20 @@ public class ApplicationShiro {
 		规则之三
 		FilterChain的执行
 		
-		ajax问题： 对于ajax请求，如果没有认证信息，FormAuthenticationFilter拦截后将执行login的重定向，重定向的页面html将返回给ajax
-		1、将ajax记录在系统的资源表中，标记是否需要认证
-		2、重写FormAuthenticationFilter拦截器，对url进行判断
-		如果不是/login，则
-			查询该url是否需要认证，不需要认证，返回true,需要认证，如果是ajax，提示未登录，如果是页面跳转请求，交给super
-		
 		使用shiro的Authenticatin Authority
 		单体应用，前后端不分离模式下的权限控制
 		1、资源的抽象：对于页面上所有的请求url都当成一个资源
+		
+		FlFromAuthenticationFilter 重定义  onAccessDenied 覆盖FormAuthenticationFilter的逻辑
+		1、增加对资源路径的判断逻辑
+		2、将/login跳转和/login登陆确认的逻辑分开（FormAuthenticationFitler中通过POST请求区分）
+		如果是/login登陆确认请求，将该请求直接转发，在controller中执行登陆确认逻辑，登陆成功或者失败可根据
+		页面需要返回页面或者json（FormAuthenticationFilter中如果登陆成功，
+		会重定向到页面，这样默认的实现逻辑不行）
+		3、全部使用重定向（凡是页面上表单同步提交到后台的请求，处理该请求之后都应该重定向到页面，
+		如果使用跳转，浏览器地址栏url不变，浏览器刷新将导致表单重复提交[当然，前端代码可以修改浏览器地址栏的地址啦]）
+		
+		
 		
 		手机号动态验证码认证实现
 		动态密码登陆设置hidden值，phone_login_kkk
