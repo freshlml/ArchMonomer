@@ -32,6 +32,8 @@ AbstractAnnotationConfigDispatcherServletInitializer （该类会启动Dispatche
 
 使用javaConfig配置
 ApplicationConfig.class
+ApplicationShiroConfig.class
+ApplicationDao.class
 ApplicationTextConfig.class
 MvcConfig.class
 

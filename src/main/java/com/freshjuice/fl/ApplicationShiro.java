@@ -17,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import com.freshjuice.fl.filter.FlFormAuthenticationFilter;
+
 import com.freshjuice.fl.service.resource.IResourceService;
 import com.freshjuice.fl.service.user.IUserService;
+import com.freshjuice.fl.shiro.CustomRealm;
+import com.freshjuice.fl.shiro.filter.FlFormAuthenticationFilter;
 
 
 @Configuration
@@ -34,7 +36,7 @@ public class ApplicationShiro {
 		规则之三
 		FilterChain的执行
 		
-		ajax问题： 对于ajax请求，如果没有认证信息，拦截后将执行login的重定向，重定向的页面html将返回给ajax
+		ajax问题： 对于ajax请求，如果没有认证信息，FormAuthenticationFilter拦截后将执行login的重定向，重定向的页面html将返回给ajax
 		1、将ajax记录在系统的资源表中，标记是否需要认证
 		2、重写FormAuthenticationFilter拦截器，对url进行判断
 		如果不是/login，则
@@ -55,6 +57,7 @@ public class ApplicationShiro {
 		
 		第三方登陆支持： 需要第三方支持auth2，本系统作为client通过auth2去和第三方沟通得到accessToken，通过accessToken就可以访问第三方的信息
 		根据该信息在本系统中抽象成本系统的username、password，即设置为Authentication成功
+		
 		
 		shiro的cacheManager使用，后续实践
 		
@@ -166,7 +169,7 @@ public class ApplicationShiro {
     	
 		ShiroFilterFactoryBean shiroFilterBean = new ShiroFilterFactoryBean();
 		shiroFilterBean.setSecurityManager(securityManager);  //security manager
-		shiroFilterBean.setLoginUrl("/login");  //login 重定向地址 (并且form表单提交地址)
+		shiroFilterBean.setLoginUrl("/login");  //login 重定向地址 (并且form表单提交地址: 如果使用FormAuthenticationFilter默认规则的话)
 		shiroFilterBean.setUnauthorizedUrl("/unauthorized"); //无权限时 重定向地址
 		Map<String, javax.servlet.Filter> filters = new LinkedHashMap<String, javax.servlet.Filter>();
 		filters.put("flauthc", flFormAuthenticationFilter); //添加FlFormAuthenticationFilter
@@ -177,6 +180,7 @@ public class ApplicationShiro {
 		filterChainDefinitionMap.put("/images/**", "anon");
 		filterChainDefinitionMap.put("/", "anon");
 		filterChainDefinitionMap.put("/index", "anon");
+		filterChainDefinitionMap.put("/error", "anon");
 		
 		/*filterChainDefinitionMap.put("/auu", "perms[auu]"); 配置形式配置 url需要什么权限*/
 		

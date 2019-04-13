@@ -58,6 +58,8 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import com.freshjuice.fl.exception.FlRootExceptionResolver;
+
 @Configuration
 @ComponentScan(basePackages = "com.**.web", 
 	useDefaultFilters = false, 

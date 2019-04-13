@@ -1,4 +1,4 @@
-package com.freshjuice.fl;
+package com.freshjuice.fl.exception;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

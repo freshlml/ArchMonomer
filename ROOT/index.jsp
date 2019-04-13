@@ -18,14 +18,14 @@ $(function() {
 		dataType: "JSON",
 		success: function(data) {
 			if(data.code == '403')
-				alert(data.msg);
+				alert(data.message);
 			else {
 				$("body").append(data.pr3);
 			}
 		},
 		error: function(data) {
 			if(data.code == '403')
-				alert(data.msg);
+				alert(data.message);
 			else {
 				$("body").append(data.pr3);
 			}

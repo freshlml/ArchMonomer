@@ -1,4 +1,4 @@
-package com.freshjuice.fl;
+package com.freshjuice.fl.shiro;
 
 import java.util.ArrayList;
 import java.util.List;

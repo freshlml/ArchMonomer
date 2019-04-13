@@ -48,9 +48,9 @@ import com.alibaba.druid.wall.WallConfig;
 import com.alibaba.druid.wall.WallFilter;
 import com.freshjuice.fl.dao.resource.IResourceDao;
 import com.freshjuice.fl.dao.resource.impl.ResourceDaoImpl;
-import com.freshjuice.fl.filter.FlFormAuthenticationFilter;
 import com.freshjuice.fl.service.resource.IResourceService;
 import com.freshjuice.fl.service.resource.impl.ResourceServiceImpl;
+import com.freshjuice.fl.shiro.filter.FlFormAuthenticationFilter;
 
 @Configuration
 @ComponentScan(basePackages = {"com.**.service", "com.**.dao", "com.**.filter"})

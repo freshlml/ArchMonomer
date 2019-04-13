@@ -23,12 +23,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.freshjuice.fl.web.DemoController;
 
 @Controller
 public class IndexController {
 	
-	private Logger logger = LoggerFactory.getLogger(DemoController.class);
+	private Logger logger = LoggerFactory.getLogger(IndexController.class);
 	
 	@RequestMapping("/pr1")
 	@RequiresPermissions(value={"pr1"})
@@ -68,48 +67,6 @@ public class IndexController {
 		return map;
 	}
 	
-	//login 地址 和 FormAuthenticationFilter中submit地址
-	@RequestMapping("/login")
-	public ModelAndView login(HttpServletRequest request) {
-		Subject subject = SecurityUtils.getSubject();
-		if(subject != null && subject.isAuthenticated()) {
-			return index();
-		}
-		
-		String exceptionClassName = (String) request.getAttribute("shiroLoginFailure");
-        //根据shiro返回的异常类路径判断，抛出指定异常信息
-        String errorMsg = null;
-		if(exceptionClassName != null){
-			//如果exceptionClassName不为null，表示是shiro认证失败的逻辑
-            if (UnknownAccountException.class.getName().equals(exceptionClassName)) {
-                errorMsg = "账号不存在";
-            } else if (IncorrectCredentialsException.class.getName().equals(exceptionClassName)) {
-                errorMsg = "用户名/密码错误";
-            } else {
-				errorMsg = "认证失败";
-            }
-            
-            //如果login页面表单提交是ajax请求，则返回json格式错误信息
-            if("XMLHttpRequest".equalsIgnoreCase(request.getHeader("X-Requested-With"))){
-            	ModelAndView mv = new ModelAndView(new MappingJackson2JsonView());
-    			mv.addObject("code", "000");
-    			mv.addObject("message", errorMsg);
-    			return mv;
-            } else {
-            //否则跳转login，封装错误信息
-            	ModelAndView modelAndView = new ModelAndView();
-        		modelAndView.setViewName("WEB-INF/jsps/login");
-        		modelAndView.addObject("errorMsg", errorMsg);
-        		return modelAndView;
-            }
-        }
-		
-        //跳转login页面逻辑
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("WEB-INF/jsps/login");
-		modelAndView.addObject("errorMsg", errorMsg);
-		return modelAndView;
-	}
 	
 	/**
 	 * 主页
@@ -124,6 +81,13 @@ public class IndexController {
 			principal = subject.getPrincipal();
 		}
 		mv.addObject("pricipal", principal);
+		return mv;
+	}
+	
+	@RequestMapping("/error")
+	public ModelAndView err(String errorMsg) {
+		ModelAndView mv = new ModelAndView("error");
+		mv.addObject("errorMsg", errorMsg);
 		return mv;
 	}
 	

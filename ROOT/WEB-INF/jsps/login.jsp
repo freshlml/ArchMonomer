@@ -7,7 +7,7 @@
 </head>
 <body>
 ${errorMsg }
-<form action="/ArchMonomer/login" method="post">
+<form action="/ArchMonomer/loginConfirm" method="post">
 <TABLE>
 <TR>
     <TD>用户名：</TD>
