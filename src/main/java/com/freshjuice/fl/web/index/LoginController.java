@@ -1,5 +1,7 @@
 package com.freshjuice.fl.web.index;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -85,5 +87,15 @@ public class LoginController {
 		
 	}
 	
+	//根据手机号生成验证码，保存在session，返回
+	@RequestMapping("/phoneLogin/getCredit")
+	public Map<String, String> phoneGetCredit(String phoneNum) {
+		return null;
+	}
 	
+	//phone login登陆确认
+	@RequestMapping("/phoneLogin/login")
+	public ModelAndView phoneLogin(String phoneNum, String phoneCredit) {
+		return null;
+	}
 }

@@ -74,7 +74,6 @@ insert into k_role_priority values('2', 'r1', 'pr1-c1');
 insert into k_role_priority values('3', 'r1', 'pr1-c2');
 insert into k_role_priority values('4', 'r1', 'pr2');
 insert into k_role_priority values('5', 'r1', 'pr3');
-
 insert into k_role_priority values('6', 'r2', 'pr1');
 insert into k_role_priority values('7', 'r2', 'pr1-c1');
 

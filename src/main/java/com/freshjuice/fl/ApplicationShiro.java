@@ -52,18 +52,19 @@ public class ApplicationShiro {
 		
 		
 		手机号动态验证码认证实现
-		动态密码登陆设置hidden值，phone_login_kkk
 		
-		flphone拦截器： 对/login请求  并且是post请求 并且  hidden值为phone_login_kkk的 拦截  (或者对/phoneLogin/*拦截)
-		验证，手机号和动态验证码是否正确，如果正确，根据手机号获取用户信息，设置为Authenticated，重定向到上一个页面
-		                        如果不正确，记录异常信息，继续执行
+		flphone拦截器： 对/phoneLogin/*拦截
+		1、/phoneLogin/getCredit  转发给controller处理 记录并返回credit
+		2、/phoneLogin/login      转发给controller处理 验证手机号和credit，根据手机号获取用户信息，执行登陆
+		（使用FlFormAuthenticationFilter可兼容上述过程）
+		
 		
 		
 		
 		第三方登陆支持： 需要第三方支持auth2，本系统作为client通过auth2去和第三方沟通得到accessToken，通过accessToken就可以访问第三方的信息
 		根据该信息在本系统中抽象成本系统的username、password，即设置为Authentication成功
 		
-		
+		shiro中基于username、password的密码加密
 		shiro的cacheManager使用，后续实践
 		
 		

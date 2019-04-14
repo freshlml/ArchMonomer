@@ -27,8 +27,14 @@ public class FlFormAuthenticationFilter extends FormAuthenticationFilter {
 	
 	private static final String loginAssertUrl = "/loginConfirm";  //保存登陆确认地址
 	
+	private static final String phoneLoginCredit = "/phoneLogin/getCredit";  //手机号登陆时获取手机号验证码
+	private static final String phoneLoginUrl = "/phoneLogin/login";         //手机号验证码登陆
+	
 	public boolean isLoginAssert(String requestUrl) {
 		return loginAssertUrl.equals(requestUrl);
+	}
+	public boolean isPhoneLoginAssert(String requestUrl) {
+		return phoneLoginCredit.equals(requestUrl) || phoneLoginUrl.equals(requestUrl);
 	}
 	
 	@Autowired
@@ -39,6 +45,9 @@ public class FlFormAuthenticationFilter extends FormAuthenticationFilter {
 		
 		String requestUrl = getPathWithinApplication(request);
 		if (!isLoginRequest(request, response)) { //如果不是登陆请求
+			if(isPhoneLoginAssert(requestUrl)) {//如果是手机号登陆获取验证码或者手机号验证码登陆的请求，返回true，直接转发
+				return true;
+			}
 			if(isLoginAssert(requestUrl)) {//如果是登陆确认请求，则直接转发给登陆确认
 				return true;
 			}
@@ -72,7 +81,7 @@ public class FlFormAuthenticationFilter extends FormAuthenticationFilter {
 				} else {
 					//((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(request.getServletContext().getContextPath() + "/error?errorMsg=资源未定义"));
 					Map<String, String> queryParams = new HashMap<String, String>();
-					queryParams.put("errorMsg", "资源未定义");
+					queryParams.put("errorMsg", "资源未在数据中定义");
 					WebUtils.issueRedirect(request, response, "/error", queryParams, true, true);
 				}
 				return false;
