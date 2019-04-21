@@ -11,8 +11,8 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import com.freshjuice.fl.service.resource.IResourceService;
-import com.freshjuice.fl.service.user.IUserService;
+import com.freshjuice.fl.service.base.IResourceService;
+import com.freshjuice.fl.service.base.IUserService;
 
 public class CustomRealm extends AuthorizingRealm {
 	

@@ -46,10 +46,10 @@ import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import com.alibaba.druid.wall.WallConfig;
 import com.alibaba.druid.wall.WallFilter;
-import com.freshjuice.fl.dao.resource.IResourceDao;
-import com.freshjuice.fl.dao.resource.impl.ResourceDaoImpl;
-import com.freshjuice.fl.service.resource.IResourceService;
-import com.freshjuice.fl.service.resource.impl.ResourceServiceImpl;
+import com.freshjuice.fl.dao.base.IResourceDao;
+import com.freshjuice.fl.dao.base.impl.ResourceDaoImpl;
+import com.freshjuice.fl.service.base.IResourceService;
+import com.freshjuice.fl.service.base.impl.ResourceServiceImpl;
 import com.freshjuice.fl.shiro.filter.FlFormAuthenticationFilter;
 
 @Configuration

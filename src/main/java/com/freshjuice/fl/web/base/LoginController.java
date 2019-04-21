@@ -1,4 +1,4 @@
-package com.freshjuice.fl.web.index;
+package com.freshjuice.fl.web.base;
 
 import java.util.Map;
 
@@ -29,6 +29,7 @@ public class LoginController {
 	//login 跳转
 	@RequestMapping("/login")
 	public ModelAndView login(HttpServletRequest request) {
+		logger.debug("login跳转");
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("WEB-INF/jsps/login");
 		modelAndView.addObject("errorMsg", request.getParameter("errorMsg"));

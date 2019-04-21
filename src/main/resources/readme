@@ -37,14 +37,17 @@ ApplicationDao.class
 ApplicationTextConfig.class
 MvcConfig.class
 
+日志
+slf4j、logback、jcl-over-slf4j(将commons-logging适配成slf4j)
+则，如果没有logback.xml配置文件，则日志输出到console
+生产环境应该提供logback.xml文件
+https://logback.qos.ch/manual/introduction.html
+
 使用shiro的Authenticatin Authority
 单体应用，前后端不分离模式下的权限控制
 1、资源的抽象：对于页面上所有的请求url都当成一个资源
 
-单体结构、后端应用
-1、后端接口Authentication，返回accessToken，通过accessToken调用接口
-2、前端的页面跳转对后端透明
-3、前端页面上操作抽象成资源，后端提供资源Authority处理
+
 
 
 

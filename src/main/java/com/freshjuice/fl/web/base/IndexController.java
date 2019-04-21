@@ -1,4 +1,4 @@
-package com.freshjuice.fl.web.index;
+package com.freshjuice.fl.web.base;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+
+import com.freshjuice.fl.utils.FlWebUtils;
 
 
 @Controller
@@ -94,11 +96,8 @@ public class IndexController {
 	@ExceptionHandler(value=RuntimeException.class)
 	public ModelAndView exy(Exception e, 
 			HttpServletRequest request, HttpServletResponse response) {
-		String accept = request.getHeader("Accept");
-		boolean isJson = true;
-		if(accept != null && accept.contains("text/html")) {
-			isJson = false;
-		}
+		
+		boolean isJson = FlWebUtils.fAjaxRequestAccept(request);
 		if(isJson) {
 			ModelAndView mv = new ModelAndView(new MappingJackson2JsonView());
 			mv.addObject("code", "500");

@@ -1,4 +1,4 @@
-package com.freshjuice.fl.dao.user;
+package com.freshjuice.fl.dao.base;
 
 public interface IUserDao {
 	/**

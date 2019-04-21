@@ -1,4 +1,4 @@
-package com.freshjuice.fl.service.user;
+package com.freshjuice.fl.service.base;
 
 public interface IUserService {
 	/**

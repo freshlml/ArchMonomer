@@ -1,4 +1,4 @@
-package com.freshjuice.fl.dto.resource;
+package com.freshjuice.fl.dto.base;
 
 public class PriorityResource {
 	private String priorityId;

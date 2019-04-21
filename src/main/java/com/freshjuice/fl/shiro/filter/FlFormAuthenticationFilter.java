@@ -18,8 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.freshjuice.fl.dto.resource.PriorityResource;
-import com.freshjuice.fl.service.resource.IResourceService;
+import com.freshjuice.fl.dto.base.PriorityResource;
+import com.freshjuice.fl.service.base.IResourceService;
 import com.freshjuice.fl.utils.FlWebUtils;
 
 @Component("flFormAuthenticationFilter")
@@ -56,7 +56,7 @@ public class FlFormAuthenticationFilter extends FormAuthenticationFilter {
 			if(resource != null) { //如果该请求对应的resource 不为 null，
 				if("0".equals(resource.getAuthf())) { //如果该请求无需认证
 					return true;
-				} else if("0".equals(resource.getShowf())) { //如果该请求需要认证，并且是ajax请求
+				} else if(FlWebUtils.fAjaxRequest((HttpServletRequest) request)) { //如果该请求需要认证，并且是ajax请求
 					response.setCharacterEncoding("UTF-8");
 					response.setContentType("application/json; charset=UTF-8");
 					Map<String, String> map = new HashMap<String, String>();
