@@ -1,15 +1,16 @@
 package com.freshjuice.fl.dto.base;
 
 public class PriorityResource {
-	private String priorityId;
-	private String priorityCode;
-	private String priorityName;
-	private String authf;
-	private String showf;
-	private String resourceCode;
-	private String resourceName;
-	private String resourceUrl;
-	private String resourcePCode;
+	private String priorityId;    //id
+	private String priorityCode;  //权限code
+	private String priorityName;  //权限名称
+	private String authf;     //是否需要认证
+	private String authif;    //是否需要授权
+	private String showf;     //是否显示
+	private String resourceCode;  //资源code
+	private String resourceName;  //资源名称
+	private String resourceUrl;   //资源url
+	private String resourcePCode; //资源父code
 	
 	public String getPriorityId() {
 		return priorityId;
@@ -64,5 +65,11 @@ public class PriorityResource {
 	}
 	public void setResourcePCode(String resourcePCode) {
 		this.resourcePCode = resourcePCode;
+	}
+	public String getAuthif() {
+		return authif;
+	}
+	public void setAuthif(String authif) {
+		this.authif = authif;
 	}
 }

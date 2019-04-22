@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ClassUtils;
@@ -31,6 +32,7 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -101,7 +103,7 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 	 */
 	@Override
 	protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
+		registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/", "/statics/");
 	}
 	/**
 	 * 配置一个mapping(order=Int.MAX_VALUE)，该Mapping使用servlet容器的 default servlet
@@ -109,12 +111,15 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 	 * 这时将会使用 此处配置的 Mapping使用default servlet加载 /js/1.js （注意，该defualt servlet不能加载/WEB-INF目录下资源）
 	 * [当然，该Mapping的order=Int.MAX_VALUE，这就需要该请求在order<Int.MAX_VALUE没有被处理，才能执行到此处]
 	 * 与@EnableWebMvc注解的冲突？
+	 * 
+	 * 2019-4-23更新，禁用该mapping，FlWebInitializer中说明了原因
 	 */
-	@Override
+	/*@Override
 	protected void configureDefaultServletHandling(
 			DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
-	}
+	}*/
+	
 	/**
 	 * viewResolver
 	 * spring标签库
@@ -248,9 +253,28 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 	@Override
 	protected void configureHandlerExceptionResolvers(
 			List<HandlerExceptionResolver> exceptionResolvers) {
-		addDefaultHandlerExceptionResolvers(exceptionResolvers);
-		exceptionResolvers.add(2, flRootExceptionResolver());
+		//addDefaultHandlerExceptionResolvers(exceptionResolvers);
+		exceptionResolvers.add(flRootExceptionResolver());
 	}
+	/**
+	 * 关于no handlerfound exception的处理源码
+	 * protected void noHandlerFound(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		if (pageNotFoundLogger.isWarnEnabled()) {
+			pageNotFoundLogger.warn("No mapping found for HTTP request with URI [" + getRequestUri(request) +
+					"] in DispatcherServlet with name '" + getServletName() + "'");
+		}
+		if (this.throwExceptionIfNoHandlerFound) {
+			throw new NoHandlerFoundException(request.getMethod(), getRequestUri(request),
+					new ServletServerHttpRequest(request).getHeaders());
+		}
+		else {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		}
+	}
+	 * 即，默认情况下，response.sendError(HttpServletResponse.SC_NOT_FOUND); 这将写404给servlet容器，servelt容器处理该404（在web.xml中配置404的返回页面）
+	 * 所以，可以通过设置throwExceptionIfNoHandlerFound=true，让该异常执行spring mvc中的异常逻辑
+	 * 
+	 */
 	
 	
 	/**

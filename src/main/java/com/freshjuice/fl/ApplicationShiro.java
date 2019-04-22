@@ -181,9 +181,7 @@ public class ApplicationShiro {
 		filters.put("flauthc", flFormAuthenticationFilter); //添加FlFormAuthenticationFilter
 		shiroFilterBean.setFilters(filters);
 		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-		filterChainDefinitionMap.put("/css/**", "anon");   //AnonymousFilter 配置不需要认证的url
-		filterChainDefinitionMap.put("/js/**", "anon");
-		filterChainDefinitionMap.put("/images/**", "anon");
+		filterChainDefinitionMap.put("/statics/**", "anon");
 		filterChainDefinitionMap.put("/", "anon");
 		filterChainDefinitionMap.put("/index", "anon");
 		filterChainDefinitionMap.put("/error", "anon");

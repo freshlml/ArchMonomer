@@ -11,6 +11,7 @@ drop table if exists k_role;
 create table k_role
 (
 	roleId varchar(32) primary key,
+	roleCode varchar(100),
 	roleName varchar(100)
 );
 
@@ -29,6 +30,7 @@ create table k_priority_resource
 	priorityCode varchar(100),
 	priorityName varchar(100),
 	authf char(1),
+	authif char(1),
 	showf char(1),
 	resourceCode varchar(100),
 	resourceName varchar(100),
@@ -45,7 +47,8 @@ create table k_priority_resource
 --
 --showf: 标记该资源是否可显示0-不显示，1-显示
 --
-
+--authif: 是否需要授权
+--
 
 drop table if exists k_role_priority;
 create table k_role_priority
