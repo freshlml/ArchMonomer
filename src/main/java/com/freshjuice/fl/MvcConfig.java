@@ -253,8 +253,8 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 	@Override
 	protected void configureHandlerExceptionResolvers(
 			List<HandlerExceptionResolver> exceptionResolvers) {
-		//addDefaultHandlerExceptionResolvers(exceptionResolvers);
-		exceptionResolvers.add(flRootExceptionResolver());
+		addDefaultHandlerExceptionResolvers(exceptionResolvers);  
+		exceptionResolvers.add(2, flRootExceptionResolver());  //添加到 DefaultHandlerExceptionResolver 之前
 	}
 	/**
 	 * 关于no handlerfound exception的处理源码
