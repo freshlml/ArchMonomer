@@ -1,6 +1,5 @@
 package com.freshjuice.fl.web.base;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,10 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,13 +25,14 @@ import com.freshjuice.fl.utils.FlWebUtils;
 @Controller
 public class IndexController {
 	
+	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(IndexController.class);
 	
 	@RequestMapping("/pr1")
 	@RequiresPermissions(value={"pr1"})
 	public ModelAndView pr1() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("WEB-INF/jsps/pr1");
+		modelAndView.setViewName("WEB-INF/jsps/pr111");
 		return modelAndView;
 	}
 	

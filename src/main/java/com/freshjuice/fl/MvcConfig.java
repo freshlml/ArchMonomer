@@ -3,6 +3,8 @@ package com.freshjuice.fl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.locks.AbstractQueuedSynchronizer;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +31,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -228,11 +231,7 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 	 * 1)、业务方法执行的异常，通过@ControllerAdvice@ExceptionHandler模式处理
 	 * 
 	 * 4、执行完Controller业务方法之后对result和ModelAndView的异常
-	 * 
-	 * 问题3
-	 * 当没有配置异常时，服务端返回 404 + html
-	 * 1)、浏览器 将404和 html显示在页面
-	 * 2)、如果是ajax，将404设置为status值，将html设置到属性中
+	 * 1）、viewName写错： 由视图解析器解析时调用DispatcehrServlet的forward操作（在DispatcherServlet执行完之后，真正写给client时抛异常给servlet容器）
 	 * 
 	 * 
 	 * 目前的解决方案：
@@ -275,6 +274,7 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 	 * 所以，可以通过设置throwExceptionIfNoHandlerFound=true，让该异常执行spring mvc中的异常逻辑
 	 * 
 	 */
+	
 	
 	
 	/**
