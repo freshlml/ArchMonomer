@@ -43,7 +43,7 @@ public class FlFormAuthenticationFilter extends FormAuthenticationFilter {
 	protected boolean onAccessDenied(ServletRequest request,
 			ServletResponse response) throws Exception {
 		
-		String requestUrl = getPathWithinApplication(request);
+		String requestUrl = getPathWithinApplication(request); /* when /ArchMonomor/path and applicationContextName=ArchMonomor,得到/path or when /path and applicationContextName=/,得到/path */
 		if (!isLoginRequest(request, response)) { //如果不是登陆请求
 			if(isPhoneLoginAssert(requestUrl)) {//如果是手机号登陆获取验证码或者手机号验证码登陆的请求，返回true，直接转发
 				return true;

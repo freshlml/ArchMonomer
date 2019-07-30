@@ -32,10 +32,10 @@ public class ApplicationShiro {
 		规则之一
 		ShiroFilterFactoryBean 对每一个配置的url生成一个过滤器链
 		规则之二
-		SecurityManager基于SessionManager管理Session,Session用于保存认证信息
+		SecurityManager基于SessionManager管理Session,Session用于保存认证信息,将session缓存起来？缓存的session作为共享session?
 		规则之三
 		FilterChain的执行
-		
+
 		使用shiro的Authenticatin Authority
 		单体应用，前后端不分离模式下的权限控制
 		1、资源的抽象：对于页面上所有的请求url都当成一个资源
@@ -49,24 +49,28 @@ public class ApplicationShiro {
 		3、全部使用重定向（凡是页面上表单同步提交到后台的请求，处理该请求之后都应该重定向到页面，
 		如果使用跳转，浏览器地址栏url不变，浏览器刷新将导致表单重复提交[当然，前端代码可以修改浏览器地址栏的地址啦]）
 		
-		
-		
+
 		手机号动态验证码认证实现
 		
 		flphone拦截器： 对/phoneLogin/*拦截
 		1、/phoneLogin/getCredit  转发给controller处理 记录并返回credit
 		2、/phoneLogin/login      转发给controller处理 验证手机号和credit，根据手机号获取用户信息，执行登陆
-		（使用FlFormAuthenticationFilter可兼容上述过程）
-		
+		（使用FlFormAuthenticationFilter兼容上述过程）
+		需要考虑：1 自定义token 配置多个realm ？等等实现问题
+		   还是说phone校验成功后，根据手机号查找到用户，模拟username 和 password
 		
 		第三方登陆支持： 需要第三方支持auth2，本系统作为client通过auth2去和第三方沟通得到accessToken，通过accessToken就可以访问第三方的信息
 		根据该信息在本系统中抽象成本系统的username、password，即设置为Authentication成功
-		
+
+		异常处理
 		shiro使用Filter，独立于DispatcherServlet的异常处理，所以需要提供异常处理
 		
 		shiro中基于username、password的密码加密
-		shiro的cacheManager使用，后续实践
-		json返回格式需要规范化
+
+		cache的使用
+		1 session的cache
+		2 manager的cache
+		3 permissions的cache
 		
 		配置多个realm的规则？？
 		

@@ -39,7 +39,7 @@ public class CustomRealm extends AuthorizingRealm {
 		String pricipal = (String) paramPrincipalCollection.getPrimaryPrincipal();
 		
 		if(pricipal == null) return null;
-		//根据用户，加载其权限信息
+		//根据用户，加载其权限信息 （应该缓存该数据）
 		List<String> permissions = resourceService.getPermissionsOfUserByUn(pricipal);
 		
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();

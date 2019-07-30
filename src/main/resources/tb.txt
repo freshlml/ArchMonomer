@@ -1,4 +1,4 @@
-
+--使用 shiro 认证授权的表结构 start
 drop table if exists k_user;
 create table k_user
 (
@@ -31,7 +31,6 @@ create table k_priority_resource
 	priorityName varchar(100),
 	authf char(1),
 	authif char(1),
-	showf char(1),
 	resourceCode varchar(100),
 	resourceName varchar(100),
 	resourceUrl varchar(200),
@@ -45,7 +44,7 @@ create table k_priority_resource
 --3、如果一个资源authf=0,但是配置为需要授权,则授权必定会失败
 --4、如果一个资源authf=1,配置为无需授权则无需授权，配置为需要授权则需要授权
 --
---showf: 标记该资源是否可显示0-不显示，1-显示
+--showf: 标记该资源是否可显示0-不显示，1-显示 (废弃)  showf char(1),
 --
 --authif: 是否需要授权
 --
@@ -80,7 +79,7 @@ insert into k_role_priority values('5', 'r1', 'pr3');
 insert into k_role_priority values('6', 'r2', 'pr1');
 insert into k_role_priority values('7', 'r2', 'pr1-c1');
 
-
+--使用 shiro 认证授权的表结构 end
 
 
 

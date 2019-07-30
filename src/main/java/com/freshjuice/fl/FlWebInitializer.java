@@ -55,7 +55,7 @@ public class FlWebInitializer extends AbstractAnnotationConfigDispatcherServletI
 	 * 因为一旦开启，意味着，
 	 * a:如果一个404请求如/fjdkasf，能够找到mapping,该mapping找不到该文件，写给servlet容器404，则显示的是默认的404页面不友好
 	 *   而DispatcherServlet中对于no handler found的处理是，如果找不到对应的mapping(404)，则可以将异常交给spring mvc的exception resolver处理
-	 *   则对比a中描述的过程:[一个404请求,能够找到对应的mapping]就不会产生弄handler found的异常
+	 *   则对比a中描述的过程:[一个404请求,能够找到对应的mapping]就不会产生no handler found的异常
 	 * b:如果一个404请求为静态资源如1.js，该mapping找不到该文件，写给servlet容器404，这是正常的逻辑
 	 * 
 	 * 4、spring boot 中会注册一个mapping(order=Int.MAX_VALUE-1),去处理配置的静态资源目录下面的资源的加载

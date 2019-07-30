@@ -24,14 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -59,13 +52,35 @@ useDefaultFilters = false,
 excludeFilters = {
 		@ComponentScan.Filter(type=FilterType.ANNOTATION, value={Controller.class})  
 })*/
-@EnableAspectJAutoProxy(proxyTargetClass=true)
-@EnableTransactionManagement(proxyTargetClass=true)
+@EnableAspectJAutoProxy(proxyTargetClass=true)  //enable @Aspectj
+@EnableTransactionManagement(proxyTargetClass=true) //enable transaction 注解
 @Import(value={ApplicationDao.class, ApplicationShiro.class})
 public class ApplicationConfig {
 	
 	//https://hanqunfeng.iteye.com/blog/2113820 零配置参照博客
 	
-	
-	
+	/*创建bean时，指定@Profile,表示该bean的有效空间，通过spring.profiles.active激活对应的profile （ArchIsomer中配置了prod,dev的原理就是这）*/
+    /*@Bean
+    @Profile("dev")
+    public DataSource devDataSource() {
+        return null;
+    }
+    @Bean
+    @Profile("prod")
+    public DataSource prodDataSource() {
+        return null;
+    }*/
+    /*
+    * spring.profiles.active
+    * 1.作为DispatcherServlet的参数设置
+    * 2.作为web应用的上下文参数设置
+    * 3.JVM系统属性设置
+    * 4.在集成测试类上使用@ActiveProfiles注解设置
+    * 5.使用环境变量设置
+    */
+
+    /*条件化bean @Conditional*/
+
+    /*bean的歧义性 @Primary @Qualifier*/
+
 }
