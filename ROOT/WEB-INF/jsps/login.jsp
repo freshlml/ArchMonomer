@@ -27,6 +27,25 @@ ${errorMsg }
 </TABLE>
 </form>
 
+<form action="/ArchMonomer/phoneLogin/login" method="post">
+    <TABLE>
+        <TR>
+            <TD>手机号：</TD>
+            <TD colSpan="2"><input type="text"
+                                   name="phoneNum" style="WIDTH: 130px" /></TD>
+        </TR>
+        <TR>
+            <TD>验证码：</TD>
+            <TD colSpan="2"><input type="text"
+                                   name="phoneCredit" style="WIDTH: 130px" /></TD>
+        </TR>
+        <TR>
+            <TD></TD>
+            <TD><input type="submit" value="submit" style="WIDTH: 130px" />
+            </TD>
+        </TR>
+    </TABLE>
+</form>
 
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.freshjuice.fl.service.base.impl;
 
+import com.freshjuice.fl.dto.base.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,16 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public String getPswdOfUserByUn(String principal) {
 		return userDao.getPswdOfUserByUn(principal);
+	}
+
+	@Override
+	public User getUserByUn(String username) {
+		return userDao.getUserByUn(username);
+	}
+
+	@Override
+	public User getUserByPhone(String phone) {
+		return userDao.getUserByPhone(phone);
 	}
 
 }

@@ -2,10 +2,8 @@ package com.freshjuice.fl.shiro;
 
 import java.util.List;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import com.freshjuice.fl.dto.base.User;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -35,30 +33,52 @@ public class CustomRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection paramPrincipalCollection) {
-		
-		String pricipal = (String) paramPrincipalCollection.getPrimaryPrincipal();
-		
-		if(pricipal == null) return null;
-		//根据用户，加载其权限信息 （应该缓存该数据）
-		List<String> permissions = resourceService.getPermissionsOfUserByUn(pricipal);
-		
-        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        simpleAuthorizationInfo.addStringPermissions(permissions);
-        
-        return simpleAuthorizationInfo;
+
+		UserPrincipal userPrincipal = (UserPrincipal) paramPrincipalCollection.getPrimaryPrincipal(); //only one principal exists
+
+		//String principal = (String) paramPrincipalCollection.getPrimaryPrincipal();
+		//if(userPrincipal == null) return null;  //如果无认证信息，但是该资源进行Authorize(这当属不正常情况)
+		if(PrincipalEnum.USERNAME.getValue().equals(userPrincipal.getType().getValue())) {
+			List<String> permissions = resourceService.getPermissionsOfUserByUn(userPrincipal.getUsername());
+
+			SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+			simpleAuthorizationInfo.addStringPermissions(permissions);
+
+			return simpleAuthorizationInfo;
+		}
+		return null;
 	}
 
+	/**
+	 * super.supports的实现是UsernamePasswordToken及其子类 返回true；这里覆盖默认实现，只处理UsernamePasswordToken
+	 */
+	@Override
+	public boolean supports(AuthenticationToken token) {
+		return token.getClass() == UsernamePasswordToken.class;
+	}
+
+	/**
+	 *
+	 * @param token
+	 * @return
+	 * @throws AuthenticationException
+	 */
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken token)
 			throws AuthenticationException {
-		
-		String principal = (String) token.getPrincipal(); //用户输入的用户凭证
-		String credencial = userService.getPswdOfUserByUn(principal);
-		
-		if(credencial == null) return null; //返回null 将抛出UnknownAccountException
-		
-		return new SimpleAuthenticationInfo(principal, credencial, this.getName());
+
+		UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
+		String username = usernamePasswordToken.getUsername();
+		//String password = userService.getPswdOfUserByUn(username);
+		User user = userService.getUserByUn(username);
+
+		//if(password == null) return null;
+		if(user == null) throw new UnknownAccountException("用户名: [" + username + "]不存在");
+
+		return new SimpleAuthenticationInfo(new UserPrincipal(username, user.getPhone(), PrincipalEnum.USERNAME),
+				user.getUserPswd(),
+				this.getName());
 	}
 
 	

@@ -1,9 +1,11 @@
 package com.freshjuice.fl.utils;
 
+import org.apache.shiro.web.util.WebUtils;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class FlWebUtils {
-	
+	public static final String FULL_AJAX_MARK = "ful_ajax_mark";
 	/**
 	 * 根据request.getHeader判断是否是ajax请求
 	 * @param request
@@ -13,6 +15,15 @@ public class FlWebUtils {
 		String requestType = request.getHeader("X-Requested-With");
 		if("XMLHttpRequest".equals(requestType)) return true;
 		return false;
+	}
+
+	public static boolean fAjaxRequestExtend(HttpServletRequest request) {
+		String fAjax = (String) request.getAttribute(FULL_AJAX_MARK);
+		if(fAjax != null) {
+			return "1".equals(fAjax)?true:false;
+		} else {
+			return fAjaxRequest(request);
+		}
 	}
 	
 	/**
@@ -28,6 +39,45 @@ public class FlWebUtils {
 		if(accept != null && accept.contains("text/html")) return false;
 		return true;
 	}
-	
-	
+
+	/**
+	 * fAjaxRequestAccept 增加前置判断request.getAttribute(FULL_AJAX_MARK)
+	 * @param request
+	 * @return
+	 */
+	public static boolean fAjaxRequestAcceptExtend(HttpServletRequest request) {
+		String fAjax = (String) request.getAttribute(FULL_AJAX_MARK);
+		if(fAjax != null) {
+			return "1".equals(fAjax)?true:false;
+		} else {
+			return fAjaxRequestAccept(request);
+		}
+	}
+
+	/**
+	 * 获取requestURI exclude Context Path
+	 * @param request
+	 * @return
+	 */
+	public static String getPathWithinApplication(HttpServletRequest request) {
+		return WebUtils.getPathWithinApplication(request);
+	}
+
+	/**
+	 * 获取 context path
+	 * @param request
+	 * @return
+	 */
+	public static String getContextPath(HttpServletRequest request) {
+		return WebUtils.getContextPath(request);
+	}
+
+	/**
+	 * requestURI
+	 * @param request
+	 * @return
+	 */
+	public static String getRequestUri(HttpServletRequest request) {
+		return WebUtils.getRequestUri(request);
+	}
 }

@@ -1,10 +1,12 @@
 package com.freshjuice.fl.web.base;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.freshjuice.fl.shiro.phone.PhoneToken;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -16,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
@@ -61,9 +65,9 @@ public class LoginController {
 		} catch(AuthenticationException e) { //authentication failure
 			String errorMsg;
 			if (UnknownAccountException.class == e.getClass()) {
-                errorMsg = "账号不存在";
+                errorMsg = "["+ username + "]账号不存在";
             } else if (IncorrectCredentialsException.class == e.getClass()) {
-                errorMsg = "用户名/密码错误";
+                errorMsg = "用户名或密码错误";
             } else {
 				errorMsg = "认证失败";
             }
@@ -88,15 +92,66 @@ public class LoginController {
 		
 	}
 	
-	//根据手机号生成验证码，保存在session，返回
+	//手机号验证码
 	@RequestMapping("/phoneLogin/getCredit")
+	@ResponseBody
 	public Map<String, String> phoneGetCredit(String phoneNum) {
-		return null;
+		Map<String, String> ret = new HashMap<String, String>();
+		//手机号验证码
+		ret.put("code", "200");
+		ret.put("message", phoneNum + "已生成验证码: 123456");
+		return ret;
 	}
 	
 	//phone login登陆确认
 	@RequestMapping("/phoneLogin/login")
-	public ModelAndView phoneLogin(String phoneNum, String phoneCredit) {
-		return null;
+	public ModelAndView phoneLogin(String phoneNum, String phoneCredit, String rememberMe,
+								   HttpServletRequest request, HttpServletResponse response) {
+
+		PhoneToken phoneToken = new PhoneToken(null, null, WebUtils.isTrue(request, rememberMe), request.getRemoteHost(), phoneNum, phoneCredit);
+		try {
+			Subject subject = SecurityUtils.getSubject();
+			subject.login(phoneToken);
+			//authentication success
+			//如果该登陆确认请求是ajax请求，则返回json格式数据，提示authentication成功
+			if(FlWebUtils.fAjaxRequest(request)) {
+				ModelAndView mv = new ModelAndView(new MappingJackson2JsonView());
+				mv.addObject("code", "200");
+				mv.addObject("message", "authentication 成功!!!");
+				return mv;
+			} else {
+				//否则，重定向到主页 （如果页面传递了重定向地址，则重定向到该地址）
+				ModelAndView modelAndView = new ModelAndView();
+				modelAndView.setViewName("redirect:/index");
+				return modelAndView;
+			}
+		} catch(AuthenticationException e) { //authentication failure
+			String errorMsg;
+			if (UnknownAccountException.class == e.getClass()) {
+				errorMsg = "["+ phoneNum + "]手机号不存在";
+			} else if (IncorrectCredentialsException.class == e.getClass()) {
+				errorMsg = "验证码错误";
+			} else {
+				errorMsg = "认证失败";
+			}
+			//如果该登陆确认请求是ajax请求，则返回json格式数据，提示authentication失败
+			if(FlWebUtils.fAjaxRequest(request)) {
+				ModelAndView mv = new ModelAndView(new MappingJackson2JsonView());
+				mv.addObject("code", "403");
+				mv.addObject("message", errorMsg);
+				return mv;
+			} else { //否则，重定向到login页面，提示错误信息
+				ModelAndView modelAndView = new ModelAndView();
+				modelAndView.setViewName("redirect:/login");
+				modelAndView.addObject("errorMsg", errorMsg);
+				return modelAndView;
+			}
+
+		} catch(Exception e) {
+			ModelAndView mv = new ModelAndView("error");
+			mv.addObject("errorMsg", e.getMessage());
+			return mv;
+		}
+
 	}
 }

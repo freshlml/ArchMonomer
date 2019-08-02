@@ -4,7 +4,8 @@ create table k_user
 (
 	userId varchar(32) primary key,
 	userName varchar(100),
-	userPswd varchar(100)
+	userPswd varchar(100),
+	phone varchar(11)
 );
 
 drop table if exists k_role;
@@ -48,6 +49,7 @@ create table k_priority_resource
 --
 --authif: 是否需要授权
 --
+--关于priorityCode shiro 支持user:delete细粒度资源控制，在table中表现为父子关系
 
 drop table if exists k_role_priority;
 create table k_role_priority
@@ -58,12 +60,22 @@ create table k_role_priority
 );
 
 
-insert into k_user values('u1', 'ioc', 'di');
+insert into k_user values('u1', 'ioc', 'di', '15623236821');
 insert into k_role values('r1', 'role1');
 insert into k_role values('r1', 'role2');
 
 insert into k_user_role values('ur1', 'u1', 'r1');
 insert into k_user_role values('ur2', 'u1', 'r2');
+
+--任何一个资源都应该在k_priority_resouce中配置
+insert into k_priority_resource values('1', '1', '1', '0', '0', '1', '主页1', '/', null);
+insert into k_priority_resource values('2', '2', '2', '0', '0', '2', '主页2', '/index', null);
+insert into k_priority_resource values('3', '3', '3', '0', '0', '3', 'login', '/login', null);
+insert into k_priority_resource values('4', '4', '4', '0', '0', '4', 'loginConfirm', '/loginConfirm', null);
+insert into k_priority_resource values('5', '5', '5', '0', '0', '5', 'phoneLogin', '/phoneLogin/getCredit', null);
+insert into k_priority_resource values('6', '6', '6', '0', '0', '6', 'phoneLoginConfirm', '/phoneLogin/login', null);
+insert into k_priority_resource values('7', '7', '7', '0', '0', '7', 'error', '/error', null);
+
 
 insert into k_priority_resource values('pr1', 'pr1', 'pr1权限', '1', '1', 'pr1Resource', 'pr1资源名称', '/pr1', null);
 insert into k_priority_resource values('pr1-c1', 'pr1-c1', 'pr1-c1权限', '1', '1', 'pr1-c1Resource', 'pr1-c1资源名称', '/pr1-c1', 'pr1');

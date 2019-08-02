@@ -5,5 +5,13 @@
 	<select id="getPswdOfUserByUn" parameterType="java.lang.String" resultType="java.lang.String">
 		select userPswd from k_user where userName = #{value, jdbcType=VARCHAR}
 	</select>
-	
+
+	<select id="getUserByUn" parameterType="java.lang.String" resultType="com.freshjuice.fl.dto.base.User">
+		select userId,userName,userPswd,phone from k_user where userName = #{value, jdbcType=VARCHAR}
+	</select>
+
+	<select id="getUserByPhone" parameterType="java.lang.String" resultType="com.freshjuice.fl.dto.base.User">
+		select userId,userName,userPswd,phone from k_user where phone = #{value, jdbcType=VARCHAR}
+	</select>
+
 </mapper>

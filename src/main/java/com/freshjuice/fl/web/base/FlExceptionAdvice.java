@@ -1,23 +1,26 @@
-package com.freshjuice.fl.exception;
+package com.freshjuice.fl.web.base;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.freshjuice.fl.exception.FlRootExceptionResolver;
+import com.freshjuice.fl.utils.FlWebUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.freshjuice.fl.utils.FlWebUtils;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public class FlRootExceptionResolver implements HandlerExceptionResolver {
-	private Logger logger = LoggerFactory.getLogger(FlRootExceptionResolver.class);
-	@Override
-	public ModelAndView resolveException(HttpServletRequest request,
-			HttpServletResponse response, Object handler, Exception ex) {
+@ControllerAdvice
+public class FlExceptionAdvice {
+	private Logger logger = LoggerFactory.getLogger(FlExceptionAdvice.class);
+    @ExceptionHandler(value=Exception.class)
+	public ModelAndView exy(Exception ex,
+                            HttpServletRequest request, HttpServletResponse response) {
+
 		//boolean isJson = FlWebUtils.fAjaxRequestAccept(request);
 		boolean isJson = FlWebUtils.fAjaxRequestAcceptExtend(request);
 		String errMessage = "系统异常";
@@ -39,5 +42,4 @@ public class FlRootExceptionResolver implements HandlerExceptionResolver {
 			return mv;
 		}
 	}
-
 }

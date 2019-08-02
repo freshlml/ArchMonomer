@@ -1,6 +1,8 @@
 package com.freshjuice.fl;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
@@ -10,10 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import com.freshjuice.fl.service.base.IResourceService;
+import com.freshjuice.fl.web.interceptor.FlBaseInterceptor;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +33,7 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
@@ -37,12 +43,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.HandlerExceptionResolverComposite;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -57,6 +58,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.ViewResolverComposite;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+import org.springframework.web.util.UrlPathHelper;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -91,6 +93,51 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 	protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		converters.add(jacksonConverter());
 	}
+
+	@Autowired
+	private IResourceService resourceService;
+
+	@Bean
+	public FlBaseInterceptor flBaseInterceptor() {
+		FlBaseInterceptor flBaseInterceptor = new FlBaseInterceptor();
+		flBaseInterceptor.setResourceService(resourceService);
+		return flBaseInterceptor;
+	}
+
+	@Override
+	@Bean
+	public RequestMappingHandlerMapping requestMappingHandlerMapping() {
+		RequestMappingHandlerMapping handlerMapping = createRequestMappingHandlerMapping();
+		handlerMapping.setOrder(0);
+		List<Object> interceptorList = new ArrayList<Object>();
+		interceptorList.addAll(Arrays.asList(getInterceptors()));
+		interceptorList.add(flBaseInterceptor());           //只为此mapping添加interceptor
+		handlerMapping.setInterceptors(interceptorList.toArray());
+		handlerMapping.setContentNegotiationManager(mvcContentNegotiationManager());
+		handlerMapping.setCorsConfigurations(getCorsConfigurations());
+
+		PathMatchConfigurer configurer = getPathMatchConfigurer();
+		if (configurer.isUseSuffixPatternMatch() != null) {
+			handlerMapping.setUseSuffixPatternMatch(configurer.isUseSuffixPatternMatch());
+		}
+		if (configurer.isUseRegisteredSuffixPatternMatch() != null) {
+			handlerMapping.setUseRegisteredSuffixPatternMatch(configurer.isUseRegisteredSuffixPatternMatch());
+		}
+		if (configurer.isUseTrailingSlashMatch() != null) {
+			handlerMapping.setUseTrailingSlashMatch(configurer.isUseTrailingSlashMatch());
+		}
+		UrlPathHelper pathHelper = configurer.getUrlPathHelper();
+		if (pathHelper != null) {
+			handlerMapping.setUrlPathHelper(pathHelper);
+		}
+		PathMatcher pathMatcher = configurer.getPathMatcher();
+		if (pathMatcher != null) {
+			handlerMapping.setPathMatcher(pathMatcher);
+		}
+
+		return handlerMapping;
+	}
+
 	/**
 	 * 配置一个mapping(order=Int.MAX_VALUE-1)，该Mapping使用自定义的规则对请求进行mapping
 	 * 如registry.addResourceHandler("/css/**").addResourceLocations("/css/"); 

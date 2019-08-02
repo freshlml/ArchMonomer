@@ -16,6 +16,6 @@
 	</select>
 	
 	<select id="getResourceOfPath" parameterType="java.lang.String" resultType="com.freshjuice.fl.dto.base.PriorityResource">
-		select authf,showf from k_priority_resource where resourceUrl = #{value, jdbcType=VARCHAR}
+		select authf,authif from k_priority_resource where resourceUrl = #{value, jdbcType=VARCHAR}
 	</select>
 </mapper>

@@ -81,7 +81,7 @@ public class FlFormAuthenticationFilter extends FormAuthenticationFilter {
 				} else {
 					//((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(request.getServletContext().getContextPath() + "/error?errorMsg=资源未定义"));
 					Map<String, String> queryParams = new HashMap<String, String>();
-					queryParams.put("errorMsg", "资源未在数据中定义");
+					queryParams.put("errorMsg", "资源未定义");
 					WebUtils.issueRedirect(request, response, "/error", queryParams, true, true);
 				}
 				return false;
