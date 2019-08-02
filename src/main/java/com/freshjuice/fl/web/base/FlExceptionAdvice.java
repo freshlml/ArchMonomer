@@ -1,5 +1,6 @@
 package com.freshjuice.fl.web.base;
 
+import com.freshjuice.fl.exception.FlRootException;
 import com.freshjuice.fl.exception.FlRootExceptionResolver;
 import com.freshjuice.fl.utils.FlWebUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
@@ -28,16 +29,17 @@ public class FlExceptionAdvice {
 			errMessage = "无权限";
 		} else if(UnauthenticatedException.class == ex.getClass()) {
 			errMessage = "check权限前为Authentication";
+		} else if(ex instanceof FlRootException) {
+			errMessage = ex.getMessage();
 		}
 		logger.error(ex.getMessage());
 		if(isJson) {
 			ModelAndView mv = new ModelAndView(new MappingJackson2JsonView());
 			mv.addObject("code", "500");
-
 			mv.addObject("message", errMessage);
 			return mv;
 		} else {
-			ModelAndView mv = new ModelAndView("error");
+			ModelAndView mv = new ModelAndView("redirect:/error");
 			mv.addObject("errorMsg", errMessage);
 			return mv;
 		}

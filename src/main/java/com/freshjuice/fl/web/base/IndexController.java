@@ -44,7 +44,7 @@ public class IndexController {
 	}
 	
 	@RequestMapping("/pr1-c2")
-	@RequiresPermissions(value={"pr2"})
+	@RequiresPermissions(value={"pr1-c2"})
 	public ModelAndView pr1_c2() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("WEB-INF/jsps/pr1_c2");
@@ -91,5 +91,20 @@ public class IndexController {
 		return mv;
 	}
 	
-	
+	/*@ExceptionHandler(value=RuntimeException.class)
+	public ModelAndView exy(Exception e,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		boolean isJson = FlWebUtils.fAjaxRequestAccept(request);
+		if(isJson) {
+			ModelAndView mv = new ModelAndView(new MappingJackson2JsonView());
+			mv.addObject("code", "500");
+			mv.addObject("message", e.getMessage());
+			return mv;
+		} else {
+			ModelAndView mv = new ModelAndView("error");
+			mv.addObject("errorMsg", e.getMessage());
+			return mv;
+		}
+	}*/
 }

@@ -1,6 +1,6 @@
 package com.freshjuice.fl.exception;
 
-public class FlResourceExistsException extends RuntimeException {
+public class FlResourceExistsException extends FlRootException {
 
     public FlResourceExistsException(String message) {
         super(message);
