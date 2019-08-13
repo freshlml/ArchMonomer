@@ -17,7 +17,10 @@ import org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.authz.AuthorizationFilter;
+import org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.ShiroFilter;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,14 +60,21 @@ public class ApplicationShiro {
 	*
     * 前后端不分离模式下的权限控制
     * 1、资源的抽象：对于页面上所有的请求url都当成一个资源
+    *
+    * 两种Authentication方式
+    *  CustomRealm UsernamePasswordToken 用户名密码token
+    *  PhoneRealm PhoneToken 手机号验证码token
+    *  定义FlMultiRealmSuccessfulStrategy: 多realm时的选择策略
+    *  PhoneRealm中定义CredentialsMatcher: 对验证码验证
+    *  Authentication过程AuthenticationInfo中Principal统一封装成UserPrincipal对象
 	*/
 
-    /*
+   /*
 
 		session 高级 manager
 
 		异常处理
-		shiro使用Filter，独立于DispatcherServlet的异常处理，所以需要提供异常处理
+		shiro使用Filter，before 于 DispatcherServlet的异常处理，所以需要提供异常处理
 
 		cache的使用
 		1 session的cache
@@ -78,7 +88,11 @@ public class ApplicationShiro {
 
         同一个浏览器，重新登陆问题
 
-        controller上添加interceptor，判断本次请求是否是ajax；检查本请求url是否在表中exits(未login时，在AuthenticatinFilter判断了，登陆后将在interceptor中判断)
+		logout实践
+
+		ssl拦截器实践
+
+		注解形式Authorizating原理，调试Authorizating
 	*/
 	
 	
@@ -128,8 +142,8 @@ public class ApplicationShiro {
 	}
 	/**
 	 * SessionDAO的作用是为Session提供CRUD并进行持久化的一个shiro组件
-	 * MemorySessionDAO 直接在内存中进行会话维护
-	 * EnterpriseCacheSessionDAO  提供了缓存功能的会话维护，默认情况下使用MapCache实现，内部使用ConcurrentHashMap保存缓存的会话。
+	 * MemorySessionDAO 直接在内存中ConcurrentHashMap进行会话维护
+	 * EnterpriseCacheSessionDAO  利用缓存功能维护会话，默认情况下使用MapCache实现，内部使用ConcurrentHashMap保存缓存的会话。
 	 * @return
 	 */
 	@Bean
@@ -177,7 +191,7 @@ public class ApplicationShiro {
 		defaultWebSessionManager.setGlobalSessionTimeout(21600000); //session对象失效时间设置为6h
 		defaultWebSessionManager.setDeleteInvalidSessions(true); //删除invalid session
 		defaultWebSessionManager.setSessionIdUrlRewritingEnabled(false); //url后面去掉;sessionId参数
-		defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
+		defaultWebSessionManager.setSessionValidationSchedulerEnabled(true); //开启会话调度器：定期检查会话是否过期
 		return defaultWebSessionManager;
 	}
 
@@ -226,7 +240,7 @@ public class ApplicationShiro {
     @Bean
 	public ShiroFilterFactoryBean shiroFilterBean(SecurityManager securityManager,
 			FlFormAuthenticationFilter flFormAuthenticationFilter) {
-    	
+
 		ShiroFilterFactoryBean shiroFilterBean = new ShiroFilterFactoryBean();
 		shiroFilterBean.setSecurityManager(securityManager);  //security manager
 		shiroFilterBean.setLoginUrl("/login");  //login 重定向地址 (并且form表单提交地址: 如果使用FormAuthenticationFilter默认规则的话)
@@ -239,7 +253,7 @@ public class ApplicationShiro {
 		filterChainDefinitionMap.put("/", "anon");
 		filterChainDefinitionMap.put("/index", "anon");
 		filterChainDefinitionMap.put("/error", "anon");
-		
+
 		/*filterChainDefinitionMap.put("/auu", "perms[auu]"); 配置形式配置 url需要什么权限*/
 		
 		filterChainDefinitionMap.put("/**", "flauthc");

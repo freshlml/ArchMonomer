@@ -5,7 +5,7 @@
 	
 	<!-- 通过property定义变量 -->
 	<!-- <property name="FILE_PATH" value="/usr/log/ArchMonomer" /> -->
-	<property name="FILE_PATH" value="G:\Zzz" />
+	<property name="FILE_PATH" value="D:\ArchMonomerLog" />
 	<property name="FILE_HISTORY" value="60" />
 	<property name="FILE_SIZE" value="100MB" />
 	<property name="APP_NAME" value="ArchMonomer" />
@@ -59,7 +59,7 @@
 	
 	
 	<!-- 通过logger定义package的日志打印 -->
-	
+	<logger name="com.freshjuice.fl.dao" level="DEBUG" />
 	
 	<!-- 定义默认的日志输出 （根logger），level指定日志输出级别
 	appender-ref指定日志输出的appender  -->

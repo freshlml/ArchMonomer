@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 该interceptor只应用于RequestMappingHandlerMapping
- * 1 判断请求url是否在resource表中定义（AuthenticationFilter中在未认证时判断了请求url的exists,此interceptor弥补认证成功后的exits判断），抛出异常形式
+ * 1 判断请求url是否在resource表中定义（AuthenticationFilter中在未认证时判断了请求url的exists,此interceptor弥补FlFormAuthentication认证的exits判断
+ *    此处存在的一个隐藏BUG:FlFormAuthentication中基类PathMathingFilter，而此处没有patg matcher的过滤，不过这也应该不算bug，顶多算不一致），抛出异常形式
  * 2 该interceptor获取执行链中的Controller实例，判断HandlerMethod上是否有@ResponseBody注解或者Controller上是否RestController,从而记录是否返回json格式
  *
  */
