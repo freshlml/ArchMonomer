@@ -24,4 +24,14 @@ public class UserDaoImpl extends FlBaseDao implements IUserDao {
 		return this.getSqlSession().selectOne("com.freshjuice.fl.dao.base.IUserDao.getUserByPhone", phone);
 	}
 
+	@Override
+	public User getUserById(String id) {
+		return this.getSqlSession().selectOne("com.freshjuice.fl.dao.base.IUserDao.getUserById", id);
+	}
+
+	@Override
+	public void delUserById(String id) {
+		this.getSqlSession().delete("com.freshjuice.fl.dao.base.IUserDao.delUserById", id);
+	}
+
 }

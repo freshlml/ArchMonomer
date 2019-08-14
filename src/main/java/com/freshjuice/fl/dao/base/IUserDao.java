@@ -23,4 +23,17 @@ public interface IUserDao {
 	 * @return
 	 */
     User getUserByPhone(String phone);
+
+	/**
+	 * 在k_user 中根据id 查询user
+	 * @param id
+	 * @return
+	 */
+	User getUserById(String id);
+
+	/**
+	 * 在k_user 中根据id 删除user real del
+	 * @param id
+	 */
+	void delUserById(String id);
 }

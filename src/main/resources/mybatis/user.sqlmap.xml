@@ -14,4 +14,13 @@
 		select userId,userName,userPswd,phone from k_user where phone = #{value, jdbcType=VARCHAR}
 	</select>
 
+
+	<select id="getUserById" parameterType="java.lang.String" resultType="com.freshjuice.fl.dto.base.User">
+		select userId,userName,userPswd,phone from k_user where userId = #{value, jdbcType=VARCHAR}
+	</select>
+
+    <delete id="delUserById" parameterType="java.lang.String">
+		delete from k_user where userId = #{value, jdbcType=VARCHAR}
+	</delete>
+
 </mapper>

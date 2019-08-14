@@ -23,4 +23,18 @@ public interface IUserService {
 	 * @return
 	 */
     User getUserByPhone(String phone);
+
+	/**
+	 * 根据id 查询User
+	 * @param id
+	 * @return
+	 */
+	public User getUserById(String id);
+
+	/**
+	 * 根据id删除user real del
+	 * @param id
+	 */
+	public void removeUserById(String id);
+
 }

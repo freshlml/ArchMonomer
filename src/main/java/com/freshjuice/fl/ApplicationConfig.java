@@ -22,6 +22,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.*;
@@ -54,7 +55,8 @@ excludeFilters = {
 })*/
 @EnableAspectJAutoProxy(proxyTargetClass=true)  //enable @Aspectj
 @EnableTransactionManagement(proxyTargetClass=true) //enable transaction 注解
-@Import(value={ApplicationDao.class, ApplicationShiro.class})
+@EnableCaching(proxyTargetClass=true) //enale caching
+@Import(value={ApplicationDao.class, ApplicationShiro.class, ApplicationCache.class})
 public class ApplicationConfig {
 	
 	//https://hanqunfeng.iteye.com/blog/2113820 零配置参照博客
