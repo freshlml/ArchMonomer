@@ -228,7 +228,34 @@
   </dependencies>
   <build>
     <finalName>ArchMonomer</finalName>
-    
+
+	<!-- 将src/main/java的xml文件作为资源文件cp -->
+	<resources>
+		<resource>
+			<directory>src/main/resources</directory>
+		</resource>
+		<resource>
+			<directory>src/main/java</directory>
+			<includes>
+				<include>**/*.xml</include>
+			</includes>
+			<filtering>true</filtering>
+		</resource>
+	</resources>
+
+    <testResources>
+	    <testResource>
+		    <directory>src/test/resources</directory>
+	    </testResource>
+		<testResource>
+			<directory>src/main/java</directory>
+			<includes>
+				<include>**/*.xml</include>
+			</includes>
+			<filtering>true</filtering>
+		</testResource>
+    </testResources>
+
     <plugins>
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
