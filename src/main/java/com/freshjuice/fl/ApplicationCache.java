@@ -1,5 +1,6 @@
 package com.freshjuice.fl;
 
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisNode;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.Serializable;
@@ -40,9 +42,43 @@ public class ApplicationCache {
     @Bean
     public RedisTemplate<Serializable, Serializable> redisTemplate() {
         RedisTemplate<Serializable, Serializable> redisTemplate = new RedisTemplate<Serializable, Serializable>();
+        redisTemplate.setKeySerializer(RedisSerializer.string());
+        redisTemplate.setValueSerializer(RedisSerializer.java());
         redisTemplate.setConnectionFactory(jedisClusterConectionFactory());
         return redisTemplate;
     }
+
+    @Bean
+    public RedisTemplate<String, Object> redisTemplateComm() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setKeySerializer(RedisSerializer.string());
+        redisTemplate.setValueSerializer(RedisSerializer.json());
+        redisTemplate.setHashKeySerializer(RedisSerializer.string());
+        redisTemplate.setHashValueSerializer(RedisSerializer.json());
+        redisTemplate.setConnectionFactory(jedisClusterConectionFactory());
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<Serializable, Session> redisTemplateRedisSession() {
+        RedisTemplate<Serializable, Session> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setKeySerializer(RedisSerializer.string());
+        redisTemplate.setValueSerializer(RedisSerializer.java());
+        redisTemplate.setHashKeySerializer(RedisSerializer.string());
+        redisTemplate.setHashValueSerializer(RedisSerializer.java());
+        redisTemplate.setConnectionFactory(jedisClusterConectionFactory());
+        return redisTemplate;
+    }
+
+    /*public <K, V> RedisTemplate<K, V> redisTemplateGene() {
+        RedisTemplate<K, V> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setKeySerializer(RedisSerializer.string());
+        redisTemplate.setValueSerializer(RedisSerializer.json());
+        redisTemplate.setHashKeySerializer(RedisSerializer.string());
+        redisTemplate.setHashValueSerializer(RedisSerializer.json());
+        redisTemplate.setConnectionFactory(jedisClusterConectionFactory());
+        return redisTemplate;
+    }*/
 
     //RedisConnectionFactory using JedisConnectionFactory
     @Bean

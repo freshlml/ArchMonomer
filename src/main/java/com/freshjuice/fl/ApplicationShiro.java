@@ -1,17 +1,25 @@
 package com.freshjuice.fl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import com.freshjuice.fl.shiro.FlMultiRealmSuccessfulStrategy;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.freshjuice.fl.shiro.*;
 import com.freshjuice.fl.shiro.phone.PhoneCredentialsMatcher;
 import com.freshjuice.fl.shiro.phone.PhoneRealm;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
+import org.apache.shiro.cache.AbstractCacheManager;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheException;
+import org.apache.shiro.cache.MapCache;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
@@ -30,8 +38,8 @@ import org.springframework.context.annotation.Primary;
 
 import com.freshjuice.fl.service.base.IResourceService;
 import com.freshjuice.fl.service.base.IUserService;
-import com.freshjuice.fl.shiro.CustomRealm;
 import com.freshjuice.fl.shiro.filter.FlFormAuthenticationFilter;
+import org.springframework.data.redis.core.RedisTemplate;
 
 
 @Configuration
@@ -50,7 +58,7 @@ public class ApplicationShiro {
 	*/
 
 	/*web support 组件，用于集成web环境
-	* ShiroFilterFactoryBean 对每一个配置的url生成一个过滤器链
+	* ShiroFilterFactoryBean 生成一个过滤器链
 	*  如 /** flauthc,permission("perm-name") 将在/**请求url上引应用Authentictor和Authorizer拦截器
 	*  其中Authentictor系列拦截器为认证拦截器，Authorizer系列拦截器为授权拦截器
 	*
@@ -132,13 +140,16 @@ public class ApplicationShiro {
 		return phoneRealm;
 	}
 
+	@Autowired
+	private RedisTemplate<Serializable, Session> redisTemplateRedisSession;
+
 	/**
 	 * session Id 生成器
 	 * @return
 	 */
 	@Bean
 	public SessionIdGenerator sessionIdGenerator() {
-	    return new JavaUuidSessionIdGenerator();
+	    return new JavaUuidSessionIdGener();
 	}
 	/**
 	 * SessionDAO的作用是为Session提供CRUD并进行持久化的一个shiro组件
@@ -148,14 +159,17 @@ public class ApplicationShiro {
 	 */
 	@Bean
 	public SessionDAO sessionDao() {
-	    EnterpriseCacheSessionDAO enterpriseCacheSessionDAO = new EnterpriseCacheSessionDAO();
-	    //使用resisCacheManager  关于缓存session 应该还有更过的细节需要考虑
-	//enterpriseCacheSessionDAO.setCacheManager(redisCacheManager());
+		FlCacheSessionDAO flCacheSessionDAO = new FlCacheSessionDAO();
+		flCacheSessionDAO.setCacheManager(new AbstractCacheManager() {
+			protected Cache<Serializable, Session> createCache(String name) throws CacheException {
+				return new ShiroRedisCache(name, redisTemplateRedisSession);
+			}
+		});
 	    //设置session缓存的名字 默认为 shiro-activeSessionCache
-	    enterpriseCacheSessionDAO.setActiveSessionsCacheName("shiro-activeSessionCache");
+		flCacheSessionDAO.setActiveSessionsCacheName("shiro-activeSessionCache");
 	    //sessionId生成器
-	    enterpriseCacheSessionDAO.setSessionIdGenerator(sessionIdGenerator());
-	    return enterpriseCacheSessionDAO;
+		flCacheSessionDAO.setSessionIdGenerator(sessionIdGenerator());
+	    return flCacheSessionDAO;
 	}
 	/**
 	 * Session in Cookie
@@ -188,7 +202,7 @@ public class ApplicationShiro {
 		//设置cacheManager cacheManager应该有更过细节
 	//defaultWebSessionManager.setCacheManager(redisCacheManager());
 		
-		defaultWebSessionManager.setGlobalSessionTimeout(21600000); //session对象失效时间设置为6h
+		defaultWebSessionManager.setGlobalSessionTimeout(3600000); //session对象失效时间设置为1h
 		defaultWebSessionManager.setDeleteInvalidSessions(true); //删除invalid session
 		defaultWebSessionManager.setSessionIdUrlRewritingEnabled(false); //url后面去掉;sessionId参数
 		defaultWebSessionManager.setSessionValidationSchedulerEnabled(true); //开启会话调度器：定期检查会话是否过期
