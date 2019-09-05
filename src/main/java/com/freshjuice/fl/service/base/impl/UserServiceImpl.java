@@ -4,17 +4,21 @@ import com.freshjuice.fl.dto.base.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.freshjuice.fl.dao.base.IUserDao;
 import com.freshjuice.fl.service.base.IUserService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("userService")
 public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	private IUserDao userDao;
-	
+	@Autowired
+	private RedisTemplate<String, Object> redisTempleteComm;
+
 	@Override
 	public String getPswdOfUserByUn(String principal) {
 		return userDao.getPswdOfUserByUn(principal);
@@ -22,13 +26,50 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public User getUserByUn(String username) {
-		return userDao.getUserByUn(username);
+		User user = (User) redisTempleteComm.opsForValue().get("user::" + username);
+		if (user != null) return user;
+		User userDb = userDao.getUserByUn(username);
+		redisTempleteComm.opsForValue().set("user::" + username, userDb);
+		return userDb;
 	}
 
 	@Override
 	public User getUserByPhone(String phone) {
-		return userDao.getUserByPhone(phone);
+		User user = (User) redisTempleteComm.opsForValue().get("user::" + phone);
+		if(user != null) return user;
+		User userDb = userDao.getUserByPhone(phone);
+		redisTempleteComm.opsForValue().set("user::" + phone, userDb);
+		return userDb;
 	}
+
+	@Override
+	public User getUserById(String userId) {
+		User user = (User) redisTempleteComm.opsForValue().get("user::" + userId);
+		if(user != null) return user;
+		User userDb = userDao.getUserById(userId);
+		redisTempleteComm.opsForValue().set("user::" + userId, userDb);
+		return userDb;
+	}
+
+	/**
+	 * cache方案
+	 * 读： 查询cache,命中返回,不命中查询db,写入cache，查询cache，写入cache失败均没关系
+	 * 写： 更新db，删除cache(删除成功或者失败都没关系)，开启异步删除消息(保证成功执行一次删除)
+	 * @param user
+	 */
+	@Transactional
+	@Override
+	public void updateUser(User user) {
+		User userPrev = getUserById(user.getUserId());
+		userDao.updateUser(user);
+		redisTempleteComm.delete("user::" + userPrev.getUserId());
+		redisTempleteComm.delete("user::" + userPrev.getUserName());
+		redisTempleteComm.delete("user::" + userPrev.getPhone());
+		//向消息队列写一个异步删除消息，消息队列消费必须确保该删除成功执行一次
+
+	}
+
+
 
 	/*
 	 * spring-data-redis 抽象目前遇到的问题：

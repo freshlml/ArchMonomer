@@ -1,9 +1,11 @@
 package com.freshjuice.fl.shiro;
 
+import java.io.Serializable;
+
 /**
  * shiro 对principal（用户身份）的封装
  */
-public class UserPrincipal {
+public class UserPrincipal implements Serializable {
 
     private String username; //用户名
     private String phone;    //手机号

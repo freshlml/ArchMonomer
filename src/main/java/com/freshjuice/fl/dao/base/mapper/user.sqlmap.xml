@@ -23,4 +23,17 @@
 		delete from k_user where userId = #{value, jdbcType=VARCHAR}
 	</delete>
 
+	<update id="updateUser" parameterType="com.freshjuice.fl.dto.base.User">
+		update k_user set
+			    <if test="userName != null and userName != ''">
+					userName = #{userName, jdbcType=VARCHAR}
+			    </if>
+				<if test="userName != null and userName != ''">
+					userPswd = #{userPswd, jdbcType=VARCHAR}
+				</if>
+				<if test="userName != null and userName != ''">
+					phone = #{phone, jdbcType=VARCHAR}
+				</if>
+		where userId = #{userId, jdbcType=VARCHAR}
+	</update>
 </mapper>

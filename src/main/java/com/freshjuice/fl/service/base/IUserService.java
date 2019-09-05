@@ -24,4 +24,17 @@ public interface IUserService {
 	 */
     User getUserByPhone(String phone);
 
+	/**
+	 * 根据userId查询user
+	 * @param userId
+	 * @return
+	 */
+	User getUserById(String userId);
+
+	/**
+	 * 更新user
+	 * @param user
+	 */
+	void updateUser(User user);
+
 }

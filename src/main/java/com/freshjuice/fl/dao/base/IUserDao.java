@@ -36,4 +36,10 @@ public interface IUserDao {
 	 * @param id
 	 */
 	void delUserById(String id);
+
+	/**
+	 * k_user 中更新
+	 * @param user
+	 */
+    void updateUser(User user);
 }

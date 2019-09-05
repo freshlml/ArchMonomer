@@ -34,4 +34,9 @@ public class UserDaoImpl extends FlBaseDao implements IUserDao {
 		this.getSqlSession().delete("com.freshjuice.fl.dao.base.IUserDao.delUserById", id);
 	}
 
+	@Override
+	public void updateUser(User user) {
+		this.getSqlSession().update("com.freshjuice.fl.dao.base.IUserDao.updateUser", user);
+	}
+
 }
