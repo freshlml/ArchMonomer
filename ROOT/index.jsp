@@ -9,6 +9,7 @@
 <body>
 <a href="${pageContext.request.contextPath }/pr1">pr1</a>
 <a href="${pageContext.request.contextPath }/pr2">pr2</a>
+<a href="/ArchMonomer/logout">logout</a>
 </body>
 <script type="text/javascript">
 $(function() {

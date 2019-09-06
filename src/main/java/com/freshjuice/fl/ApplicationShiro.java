@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.freshjuice.fl.shiro.*;
+import com.freshjuice.fl.shiro.filter.FlLogoutFilter;
 import com.freshjuice.fl.shiro.phone.PhoneCredentialsMatcher;
 import com.freshjuice.fl.shiro.phone.PhoneRealm;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
@@ -25,6 +26,7 @@ import org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 import org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -75,35 +77,21 @@ public class ApplicationShiro {
     *  定义FlMultiRealmSuccessfulStrategy: 多realm时的选择策略
     *  PhoneRealm中定义CredentialsMatcher: 对验证码验证
     *  Authentication过程AuthenticationInfo中Principal统一封装成UserPrincipal对象
+    *
+    *  SessionDAO使用缓存功能保存session,定义ShiroRedisCache,使用redis保存session
+    *  realm不适用shiro的缓存功能，查询数据库中的数据统一使用redis缓存
 	*/
 
    /*
 
-		session 高级 manager
 
-		异常处理
-		shiro使用Filter，before 于 DispatcherServlet的异常处理，所以需要提供异常处理
 
-		cache的使用
-		1 session的cache
-		2 manager的cache
-		3 permissions的cache
+		
 
-		使用缓存时 realm的doGetAuthenticationInfo方法中不能存在校验的代码
-		使用缓存时 realm的name是否覆盖
-
-		通过数据库查找数据，使用数据库的缓存，不使用shiro的缓存支持，或者两者存在一致性
-
-        同一个浏览器，重新登陆问题
-
-		logout实践
-
-		ssl拦截器实践
-
+		异常处理  shiro使用Filter，before 于 DispatcherServlet的异常处理，所以需要提供异常处理
 		注解形式Authorizating原理，调试Authorizating
 	*/
-	
-	
+
 	/**
 	 * Realm组件，用于Authentication and Authority 回调
 	 * @return
@@ -253,7 +241,8 @@ public class ApplicationShiro {
     /*shiro FilterFactoryBean*/
     @Bean
 	public ShiroFilterFactoryBean shiroFilterBean(SecurityManager securityManager,
-			FlFormAuthenticationFilter flFormAuthenticationFilter) {
+												  FlFormAuthenticationFilter flFormAuthenticationFilter,
+												  FlLogoutFilter flLogoutFilter) {
 
 		ShiroFilterFactoryBean shiroFilterBean = new ShiroFilterFactoryBean();
 		shiroFilterBean.setSecurityManager(securityManager);  //security manager
@@ -261,12 +250,14 @@ public class ApplicationShiro {
 		shiroFilterBean.setUnauthorizedUrl("/unauthorized"); //无权限时 重定向地址
 		Map<String, javax.servlet.Filter> filters = new LinkedHashMap<String, javax.servlet.Filter>();
 		filters.put("flauthc", flFormAuthenticationFilter); //添加FlFormAuthenticationFilter
+		filters.put("fllogout", flLogoutFilter); //添加FlLogoutFilter
 		shiroFilterBean.setFilters(filters);
 		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
 		filterChainDefinitionMap.put("/statics/**", "anon");
 		filterChainDefinitionMap.put("/", "anon");
 		filterChainDefinitionMap.put("/index", "anon");
 		filterChainDefinitionMap.put("/error", "anon");
+		filterChainDefinitionMap.put("/logout", "fllogout");
 
 		/*filterChainDefinitionMap.put("/auu", "perms[auu]"); 配置形式配置 url需要什么权限*/
 		
