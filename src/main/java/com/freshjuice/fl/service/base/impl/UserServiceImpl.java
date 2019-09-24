@@ -26,7 +26,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public User getUserByUn(String username) {
-		User user = (User) redisTempleteComm.opsForValue().get("user::" + username);
+		User user = (User) redisTempleteComm.opsForValue().get("user:" + username);
 		if (user != null) return user;
 		User userDb = userDao.getUserByUn(username);
 		redisTempleteComm.opsForValue().set("user::" + username, userDb);
@@ -35,7 +35,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public User getUserByPhone(String phone) {
-		User user = (User) redisTempleteComm.opsForValue().get("user::" + phone);
+		User user = (User) redisTempleteComm.opsForValue().get("user:" + phone);
 		if(user != null) return user;
 		User userDb = userDao.getUserByPhone(phone);
 		redisTempleteComm.opsForValue().set("user::" + phone, userDb);
@@ -44,10 +44,10 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public User getUserById(String userId) {
-		User user = (User) redisTempleteComm.opsForValue().get("user::" + userId);
+		User user = (User) redisTempleteComm.opsForValue().get("user:" + userId);
 		if(user != null) return user;
 		User userDb = userDao.getUserById(userId);
-		redisTempleteComm.opsForValue().set("user::" + userId, userDb);
+		redisTempleteComm.opsForValue().set("user:" + userId, userDb);
 		return userDb;
 	}
 
@@ -62,9 +62,9 @@ public class UserServiceImpl implements IUserService {
 	public void updateUser(User user) {
 		User userPrev = getUserById(user.getUserId());
 		userDao.updateUser(user);
-		redisTempleteComm.delete("user::" + userPrev.getUserId());
-		redisTempleteComm.delete("user::" + userPrev.getUserName());
-		redisTempleteComm.delete("user::" + userPrev.getPhone());
+		redisTempleteComm.delete("user:" + userPrev.getUserId());
+		redisTempleteComm.delete("user:" + userPrev.getUserName());
+		redisTempleteComm.delete("user:" + userPrev.getPhone());
 		//向消息队列写一个异步删除消息，消息队列消费必须确保该删除成功执行一次
 
 	}

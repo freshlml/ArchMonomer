@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class FlCacheSessionDAO extends CachingSessionDAO {
     public static final String FL_SHIRO_SESSION_REDIS_PREFIX = "ShiroSessionRedisPrefix";
-    public static final String FL_SHIRO_SESSION_REDIS_SEP = "::";
+    public static final String FL_SHIRO_SESSION_REDIS_SEP = ":";
 
     public FlCacheSessionDAO() {
         this.setCacheManager(new AbstractCacheManager() {

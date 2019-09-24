@@ -25,10 +25,10 @@ public class ResourceServiceImpl implements IResourceService {
 
 	@Override
 	public List<String> getPermissionsOfUserByUn(String principal) {
-		List<String> prios = (List<String>) redisTemplateComm.opsForValue().get("resourceCodes::" + principal);
+		List<String> prios = (List<String>) redisTemplateComm.opsForValue().get("resourceCodes:" + principal);
 		if(prios != null && prios.size() > 0) return prios;
 		List<String> priosDb = resourceDao.getPermissionsOfUserByUn(principal);
-		redisTemplateComm.opsForValue().set("resourceCodes::" + principal, priosDb);
+		redisTemplateComm.opsForValue().set("resourceCodes:" + principal, priosDb);
 		return priosDb;
 	}
 

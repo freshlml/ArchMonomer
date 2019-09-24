@@ -47,8 +47,8 @@ https://logback.qos.ch/manual/introduction.html
 单体应用，前后端不分离模式下的权限控制
 1、资源的抽象：对于页面上所有的请求url都当成一个资源
 
-redis
-使用spring-data-redis集成redis
+redis redisson
+
 
 
 
