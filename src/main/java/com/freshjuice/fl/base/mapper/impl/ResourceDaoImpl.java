@@ -13,17 +13,17 @@ public class ResourceDaoImpl extends FlBaseDao implements IResourceDao {
 
 	@Override
 	public String getFAuthOfPath(String path) {
-		return this.getSqlSession().selectOne("IResourceDao.getFAuthOfPath", path);
+		return this.getSqlSession().selectOne("com.freshjuice.fl.base.mapper.IResourceDao.getFAuthOfPath", path);
 	}
 
 	@Override
 	public List<String> getPermissionsOfUserByUn(String pricipal) {
-		return this.getSqlSession().selectList("IResourceDao.getPermissionsOfUserByUn", pricipal);
+		return this.getSqlSession().selectList("com.freshjuice.fl.base.mapper.IResourceDao.getPermissionsOfUserByUn", pricipal);
 	}
 
 	@Override
 	public PriorityResource getResourceOfPath(String pathWithinApplication) {
-		return this.getSqlSession().selectOne("IResourceDao.getResourceOfPath", pathWithinApplication);
+		return this.getSqlSession().selectOne("com.freshjuice.fl.base.mapper.IResourceDao.getResourceOfPath", pathWithinApplication);
 	}
 
 }

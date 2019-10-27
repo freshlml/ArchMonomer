@@ -11,32 +11,32 @@ public class UserDaoImpl extends FlBaseDao implements IUserDao {
 
 	@Override
 	public String getPswdOfUserByUn(String principal) {
-		return this.getSqlSession().selectOne("IUserDao.getPswdOfUserByUn", principal);
+		return this.getSqlSession().selectOne("com.freshjuice.fl.base.mapper.IUserDao.getPswdOfUserByUn", principal);
 	}
 
 	@Override
 	public User getUserByUn(String username) {
-		return this.getSqlSession().selectOne("IUserDao.getUserByUn", username);
+		return this.getSqlSession().selectOne("com.freshjuice.fl.base.mapper.IUserDao.getUserByUn", username);
 	}
 
 	@Override
 	public User getUserByPhone(String phone) {
-		return this.getSqlSession().selectOne("IUserDao.getUserByPhone", phone);
+		return this.getSqlSession().selectOne("com.freshjuice.fl.base.mapper.IUserDao.getUserByPhone", phone);
 	}
 
 	@Override
 	public User getUserById(String id) {
-		return this.getSqlSession().selectOne("IUserDao.getUserById", id);
+		return this.getSqlSession().selectOne("com.freshjuice.fl.base.mapper.IUserDao.getUserById", id);
 	}
 
 	@Override
 	public void delUserById(String id) {
-		this.getSqlSession().delete("IUserDao.delUserById", id);
+		this.getSqlSession().delete("com.freshjuice.fl.base.mapper.IUserDao.delUserById", id);
 	}
 
 	@Override
 	public void updateUser(User user) {
-		this.getSqlSession().update("IUserDao.updateUser", user);
+		this.getSqlSession().update("com.freshjuice.fl.base.mapper.IUserDao.updateUser", user);
 	}
 
 }

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan(basePackages = {"com.**.service", "com.**.dao", "com.**.filter"})
+@ComponentScan(basePackages = {"com.**.service", "com.**.mapper", "com.**.filter"})
 /*@ComponentScan(basePackages = "com.freshjuice.fl", 
 useDefaultFilters = false, 
 excludeFilters = {
