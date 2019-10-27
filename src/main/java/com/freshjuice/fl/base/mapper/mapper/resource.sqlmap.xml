@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.freshjuice.fl.dao.base.IResourceDao">
+<mapper namespace="com.freshjuice.fl.base.mapper.IResourceDao">
 	
 	<select id="getFAuthOfPath" parameterType="java.lang.String" resultType="java.lang.String">
 		select authf from k_priority_resource where resourceUrl = #{value, jdbcType=VARCHAR}
@@ -15,7 +15,7 @@
 		where u.userName = #{value, jdbcType=VARCHAR}
 	</select>
 	
-	<select id="getResourceOfPath" parameterType="java.lang.String" resultType="com.freshjuice.fl.dto.base.PriorityResource">
+	<select id="getResourceOfPath" parameterType="java.lang.String" resultType="com.freshjuice.fl.base.entity.PriorityResource">
 		select authf,authif from k_priority_resource where resourceUrl = #{value, jdbcType=VARCHAR}
 	</select>
 </mapper>

@@ -1,6 +1,6 @@
-package com.freshjuice.fl.service.base;
+package com.freshjuice.fl.base.service;
 
-import com.freshjuice.fl.dto.base.User;
+import com.freshjuice.fl.base.entity.User;
 
 public interface IUserService {
 	/**

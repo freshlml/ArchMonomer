@@ -1,4 +1,4 @@
-package com.freshjuice.fl.service.base.impl;
+package com.freshjuice.fl.base.service.impl;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.freshjuice.fl.dao.base.IResourceDao;
-import com.freshjuice.fl.dto.base.PriorityResource;
-import com.freshjuice.fl.service.base.IResourceService;
+import com.freshjuice.fl.base.mapper.IResourceDao;
+import com.freshjuice.fl.base.entity.PriorityResource;
+import com.freshjuice.fl.base.service.IResourceService;
 
 @Service("resourceService")
 public class ResourceServiceImpl implements IResourceService {

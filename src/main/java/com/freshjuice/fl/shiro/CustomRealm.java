@@ -2,15 +2,15 @@ package com.freshjuice.fl.shiro;
 
 import java.util.List;
 
-import com.freshjuice.fl.dto.base.User;
+import com.freshjuice.fl.base.entity.User;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import com.freshjuice.fl.service.base.IResourceService;
-import com.freshjuice.fl.service.base.IUserService;
+import com.freshjuice.fl.base.service.IResourceService;
+import com.freshjuice.fl.base.service.IUserService;
 
 public class CustomRealm extends AuthorizingRealm {
 	

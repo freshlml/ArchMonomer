@@ -1,15 +1,14 @@
 package com.freshjuice.fl.web.interceptor;
 
-import com.freshjuice.fl.dto.base.PriorityResource;
+import com.freshjuice.fl.base.entity.PriorityResource;
 import com.freshjuice.fl.exception.FlResourceExistsException;
-import com.freshjuice.fl.service.base.IResourceService;
+import com.freshjuice.fl.base.service.IResourceService;
 import com.freshjuice.fl.utils.FlWebUtils;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

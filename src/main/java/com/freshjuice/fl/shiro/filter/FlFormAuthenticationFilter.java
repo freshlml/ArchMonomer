@@ -6,20 +6,15 @@ import java.util.Map;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.filter.authc.AnonymousFilter;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.freshjuice.fl.dto.base.PriorityResource;
-import com.freshjuice.fl.service.base.IResourceService;
+import com.freshjuice.fl.base.entity.PriorityResource;
+import com.freshjuice.fl.base.service.IResourceService;
 import com.freshjuice.fl.utils.FlWebUtils;
 
 @Component("flFormAuthenticationFilter")

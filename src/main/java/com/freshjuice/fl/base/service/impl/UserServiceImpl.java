@@ -1,14 +1,12 @@
-package com.freshjuice.fl.service.base.impl;
+package com.freshjuice.fl.base.service.impl;
 
-import com.freshjuice.fl.dto.base.User;
+import com.freshjuice.fl.base.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.freshjuice.fl.dao.base.IUserDao;
-import com.freshjuice.fl.service.base.IUserService;
+import com.freshjuice.fl.base.mapper.IUserDao;
+import com.freshjuice.fl.base.service.IUserService;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service("userService")

@@ -1,8 +1,8 @@
-package com.freshjuice.fl.service.base;
+package com.freshjuice.fl.base.service;
 
 import java.util.List;
 
-import com.freshjuice.fl.dto.base.PriorityResource;
+import com.freshjuice.fl.base.entity.PriorityResource;
 
 public interface IResourceService {
 	/**

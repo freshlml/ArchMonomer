@@ -1,8 +1,8 @@
 package com.freshjuice.fl.shiro.phone;
 
-import com.freshjuice.fl.dto.base.User;
-import com.freshjuice.fl.service.base.IResourceService;
-import com.freshjuice.fl.service.base.IUserService;
+import com.freshjuice.fl.base.entity.User;
+import com.freshjuice.fl.base.service.IResourceService;
+import com.freshjuice.fl.base.service.IUserService;
 import com.freshjuice.fl.shiro.PrincipalEnum;
 import com.freshjuice.fl.shiro.UserPrincipal;
 import org.apache.shiro.authc.*;
@@ -10,7 +10,6 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter;
 
 import java.util.List;
 

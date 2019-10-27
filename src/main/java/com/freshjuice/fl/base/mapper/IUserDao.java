@@ -1,6 +1,6 @@
-package com.freshjuice.fl.dao.base;
+package com.freshjuice.fl.base.mapper;
 
-import com.freshjuice.fl.dto.base.User;
+import com.freshjuice.fl.base.entity.User;
 
 public interface IUserDao {
 	/**

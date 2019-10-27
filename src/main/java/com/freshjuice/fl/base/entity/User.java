@@ -1,4 +1,4 @@
-package com.freshjuice.fl.dto.base;
+package com.freshjuice.fl.base.entity;
 
 import java.io.Serializable;
 

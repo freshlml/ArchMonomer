@@ -1,8 +1,8 @@
-package com.freshjuice.fl.dao.base;
+package com.freshjuice.fl.base.mapper;
 
 import java.util.List;
 
-import com.freshjuice.fl.dto.base.PriorityResource;
+import com.freshjuice.fl.base.entity.PriorityResource;
 
 public interface IResourceDao {
 	/**
