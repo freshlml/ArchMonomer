@@ -5,7 +5,7 @@
 	
 	<!-- 通过property定义变量 -->
 	<!-- <property name="FILE_PATH" value="/usr/log/ArchMonomer" /> -->
-	<property name="FILE_PATH" value="D:\ArchMonomerLog" />
+	<property name="FILE_PATH" value="D:\\ArchMonomerLog" />
 	<property name="FILE_HISTORY" value="60" />
 	<property name="FILE_SIZE" value="100MB" />
 	<property name="APP_NAME" value="ArchMonomer" />
